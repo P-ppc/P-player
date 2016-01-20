@@ -57,3 +57,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+bower_compents/
+demo/
+danmu/
