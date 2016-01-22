@@ -15,3 +15,8 @@ SECRET_KEY = 'you-will-never-guess'
 media dir.
 '''
 MEDIA_DIR = os.path.join(wwwdir, '../media')
+
+'''
+logging file.
+'''
+LOGGING_FILE = os.path.join(wwwdir, '../../log/run.log')

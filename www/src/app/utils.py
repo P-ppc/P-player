@@ -5,6 +5,12 @@
 Utils.
 '''
 
+import logging
+import traceback
+import functools
+
+from config import LOGGING_FILE
+
 class Dict(dict):
     '''
     Simple dict but support access as x.y style.
@@ -40,3 +46,14 @@ def toDict(d):
     for k, v in d.iteritems():
         D[k] = toDict(v) if isinstance(v, dict) else v
     return D
+
+'''
+for logging.
+base logging.
+'''
+def get_logging():
+    logging.basicConfig(level = logging.DEBUG,
+                format = '%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                datefmt = '%a, %d %b %Y %H:%M:%S',
+                )
+    return logging

@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/home/ppc/study/P-player/www/src/app/views.py", line 45, in post_danmu
-    print danmu_txt
-UnicodeEncodeError: 'ascii' codec can't encode characters in position 10-11: ordinal not in range(128)
