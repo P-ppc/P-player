@@ -1,0 +1,13 @@
+{% extends '__base__.html' %}
+
+{% block content %}
+
+<h4>视频列表</h4>
+<ul>
+{% if videos %}
+    {% for video in videos %}
+    <li><a href="/{{ video.id }}">{{ video.title }}</a></li>
+    {% endfor %}
+{% endif %}
+</ul>
+{% endblock content %}
