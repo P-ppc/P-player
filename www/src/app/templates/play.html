@@ -1,36 +1,114 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <link href="/static/src/css/scojs.css" rel="stylesheet">
-    <link href="/static/src/css/colpick.css" rel="stylesheet">
-    <link href="/static/src/css/bootstrap.css" rel="stylesheet">
-    <link href="/static/src/css/main.css" rel="stylesheet">
-    <!--<link href="/static/dist/css/danmuplayer.css">-->
-</head>
+{% extends '__base__.html' %}
 
-<body>
-    <div id="danmup" style="left:50%;margin-left:-400px;top:100px">
+{% block beforehead %}
+<link rel="stylesheet" href="/static/src/css/scojs.css">
+<link rel="stylesheet" href="/static/src/css/colpick.css">
+<link rel="stylesheet" href="/static/src/css/bootstrap.css">
+<link rel="stylesheet" href="/static/src/css/main.css">
+
+<link rel="stylesheet" href="/static/css/P-player.css">
+{% endblock %}
+
+{% block content %}
+<div class="uk-grid">
+    <div class="uk-width-medium-1-4 uk-push-3-4">
+        <form class="uk-form">
+            <fieldset data-uk-margin>
+                <input type="text" placeholder="搜索">
+                <button type="submit" class="uk-button">搜索</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div class="uk-grid">
+    <div class="uk-width-medium-3-4">
+        <div class="p-head">
+            <h2><strong>[TV2] 为什么我看的一月新番和你们不一样呢 ver2016.01</strong></h2>
+        </div>
+        <br>
+        <div class="p-head">
+            <span>
+                <i class="uk-icon-play-circle-o"></i>
+                4.7万
+            </span>
+            &nbsp;&nbsp;
+            <span>
+                <i class="uk-icon-commenting"></i>
+                560
+            </span>
+        </div>
     </div>
 
-    <div style="display:none">
-        <span class="glyphicon" aria-hidden="true">&#xe072</span>
-        <span class="glyphicon" aria-hidden="true">&#xe073</span>
-        <span class="glyphicon" aria-hidden="true">&#xe242</span>
-        <span class="glyphicon" aria-hidden="true">&#xe115</span>
-        <span class="glyphicon" aria-hidden="true">&#xe111</span>
-        <span class="glyphicon" aria-hidden="true">&#xe096</span>
-        <span class="glyphicon" aria-hidden="true">&#xe097</span>
+    <div class="uk-width-medium-1-4 uk-grid">
+        <div class="uk-width-medium-1-3">
+            <img src="/static/img/pic.jpg" style="width:60px;height:60px;">
+        </div>
+        <div class="uk-width-medium-2-3">
+            <h3><strong>up主</strong></h3>
+            <p>个性签名</p>    
+        </div>
     </div>
-</body>
-<script src="/static/src/js/jquery-2.1.4.min.js"></script>
+</div>
+
+<div class="uk-grid">
+    <div class="uk-width-medium-4-4"> 
+        <div class="p-head">
+            <div id="danmup" style="float:left">
+            </div>
+            <div style="background:#f6f9fa;height:30px">
+                <div style="text-align:center;height:30px;line-height:30px">
+                    <strong>弹幕</strong>
+
+                </div>
+            </div>
+            <div style="height:30px" class="uk-grid">
+                <div class="uk-width-medium-1-6" style="height:30px;line-height:30px;text-align:center;padding:0px;">
+                    时间
+                </div>
+                <div class="uk-width-medium-3-6" style="height:30px;line-height:30px;text-align:left">
+                    评论
+                </div>
+                <div class="uk-width-medium-2-6" style="height:30px;line-height:30px;text-align:left;padding:0px">
+                    发送日期
+                </div>
+            </div>
+            <div style="background:;height:460px;overflow-y:scroll;">
+                <ul class="uk-list-striped" style="list-style-type:none;margin-left:-30px;">
+                    {% for danmu in video.danmus %}
+                        <li style="padding:0px">
+                            <div class="uk-grid" style="margin-left:0px">
+                                <div class="uk-width-medium-1-6" style="height:30px;line-height:30px;text-align:center;padding:0px">
+                                    <div style="margin-left:10px">
+                                        {{ danmu.time }}
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-3-6" style="height:30px;line-height:30px;text-align:left;text-overflow:ellipsis;overflow:hidden">
+                                    {{ danmu.text }}
+                                </div>
+                                <div class="uk-width-medium-2-6" style="height:30px;line-height:30px;text-align:left;padding:0px">
+                                    <div style="margin-left:10px">
+                                        {{ danmu.danmu_time }}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
 <script src="/static/src/js/jquery.shCircleLoader.js"></script>
 <script src="/static/src/js/sco.tooltip.js"></script>
 <script src="/static/src/js/colpick.js"></script>
 <script src="/static/src/js/jquery.danmu.js"></script>
 <script src="/static/src/js/main.js"></script>
-<!--<script src="/static/dist/js/danmuplayer.min.js"></script>-->
+
 <script>
     $('#danmup').DanmuPlayer({
         src: '/media/{{ video.path }}',
@@ -39,10 +117,5 @@
         urlToGetDanmu: '{{ video.id }}/getDanmu',
         urlToPostDanmu: '{{ video.id }}/postDanmu'
     });
-    /*
-    $('#danmup .danmu-div').danmu('addDanmu', [
-        {'text': '这是滚动弹幕', color: 'white', size: 1, position: 0, time: 2}
-    ]);
-    */
 </script>
-</html>
+{% endblock %}

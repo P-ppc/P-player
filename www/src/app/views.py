@@ -9,7 +9,7 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from app import app, db, lm
-from models import User, Video, Danmu, Comment
+from models import User, Video, Danmu, Comment, Classify, Collection, PlayRecord
 from config import MEDIA_DIR
 from utils import toDict, get_logging
 
@@ -18,11 +18,10 @@ init logging.
 '''
 logging = get_logging()
 
-
 @app.route('/', methods = ['GET'])
 def index():
-    videos = Video.query.all()
-    return render_template('index.html', videos = videos) 
+    classifys = Classify.query.order_by(Classify.sort).all()
+    return render_template('index.html', classifys = classifys) 
     
 # for play
 
@@ -33,7 +32,6 @@ def play(video_id):
 
 @app.route('/<video_id>/getDanmu')
 def get_danmu(video_id):
-    #danmu1 = '{text: "弹幕", color: "white", size: "1", position: "0", time: "2"}'
     danmu_list = list()
     danmus = Danmu.query.order_by(Danmu.time).filter_by(video_id = video_id).all()
     for danmu in danmus:
@@ -41,7 +39,7 @@ def get_danmu(video_id):
         danmu_list.append(danmu_text)
     return json.dumps(danmu_list)
 
-@app.route('/<video_id>/postDanmu', methods = ['GET', 'POST'])
+@app.route('/<video_id>/postDanmu', methods = ['POST'])
 def post_danmu(video_id):
     danmu_txt = request.form.get('danmu', None)
     if danmu_txt is None:

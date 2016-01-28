@@ -1,13 +1,82 @@
 {% extends '__base__.html' %}
 
-{% block content %}
+{% block beforehead %}
+    <link rel="stylesheet" href="/static/css/P-player.css">
+{% endblock %}
 
-<h4>视频列表</h4>
-<ul>
-{% if videos %}
-    {% for video in videos %}
-    <li><a href="/{{ video.id }}">{{ video.title }}</a></li>
+{% block content %}
+<div class="uk-grid">
+    <div class="uk-width-medium-1-4 uk-push-3-4">
+        <form class="uk-form">
+            <fieldset data-uk-margin>
+                <input type="text" placeholder="搜索">
+                <button type="submit" class="uk-button">搜索</button>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% if classifys %}
+    {% for classify in classifys %}
+        <div class="uk-grid">
+            <div class="uk-width-medium-3-4">
+                <div class="p-head">
+                    <!-- 图标 -->
+                    <span class="uk-icon-bars uk-icon-medium">
+                        <!-- 标题 -->
+                        <a class="p-head-t" style="text-decoration:none"><strong>{{ classify.name }}</strong></a>
+                    </span>
+                </div>
+
+                <div class="p-body">
+                    <ul class="p-ul">
+                        {% for video in classify.videos %}
+                        <li class="p=li">
+                            <div class="p-img-div">
+                                <a target="_blank" href="{{ video.id }}">
+                                    <img class="p-img" src="/static/img/pic.jpg">
+                                </a>
+                            </div>
+                            <div class="p-img-div">
+                                {{ video.name }}
+                            </div>
+                            <div class="p-detail-div">
+                                <span>
+                                    <i class="uk-icon-play-circle-o"></i>
+                                    3.7万
+                                </span>
+                                <span class="p-comment-span">
+                                    <i class="uk-icon-commenting"></i>
+                                    500
+                                </span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="uk-width-medium-1-4">
+                <div>
+                    <span class="uk-icon-medium">
+                        <strong>排行</strong>
+                    </span>
+                </div>
+
+                <div style="margin-top:1.5em">
+                    <ul class="p-ul">
+                        {% for i in range(10) %}
+                        <li class="p-li-s">
+                            <div class="p-i-number">
+                                <span>{{ i }}</span>
+                            </div>
+                            <div class="p-i-title">
+                                <a style="text-decoration:none" class="p-head-t"><strong>[天体的秩序]绝不说再见</strong></a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+        </div>
     {% endfor %}
 {% endif %}
-</ul>
 {% endblock content %}
