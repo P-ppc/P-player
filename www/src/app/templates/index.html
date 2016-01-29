@@ -29,7 +29,7 @@
 
                 <div class="p-body">
                     <ul class="p-ul">
-                        {% for video in classify.videos %}
+                        {% for video in classify.videos[0: 8] %}
                         <li class="p=li">
                             <div class="p-img-div">
                                 <a target="_blank" href="{{ video.id }}">
@@ -37,16 +37,16 @@
                                 </a>
                             </div>
                             <div class="p-img-div">
-                                {{ video.name }}
+                                {{ video.title }}
                             </div>
                             <div class="p-detail-div">
                                 <span>
                                     <i class="uk-icon-play-circle-o"></i>
-                                    3.7万
+                                    {{ video.play_records.count() }}
                                 </span>
                                 <span class="p-comment-span">
                                     <i class="uk-icon-commenting"></i>
-                                    500
+                                    {{ video.comments.count() }}
                                 </span>
                         </li>
                         {% endfor %}
@@ -63,13 +63,13 @@
 
                 <div style="margin-top:1.5em">
                     <ul class="p-ul">
-                        {% for i in range(10) %}
+                        {% for video in classify.rank_list() %}
                         <li class="p-li-s">
                             <div class="p-i-number">
-                                <span>{{ i }}</span>
+                                <span>{{ loop.index }}</span>
                             </div>
                             <div class="p-i-title">
-                                <a style="text-decoration:none" class="p-head-t"><strong>[天体的秩序]绝不说再见</strong></a>
+                                <a target="_blank" href="{{ video.id }}" style="text-decoration:none" class="p-head-t"><strong>{{ video.title }}</strong></a>
                             </div>
                         </li>
                         {% endfor %}

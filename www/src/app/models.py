@@ -77,6 +77,17 @@ class Classify(db.Model):
     play_records = db.relationship('PlayRecord', backref = 'classify', lazy = 'dynamic')
     collections = db.relationship('Collection', backref = 'classify', lazy = 'dynamic')
 
+    def rank_list(self):
+        # 获取播放量前10的视频
+        rank_list = db.session.query(Video).from_statement(
+              "select video.*, record.count from video"
+            + " left join (select count(video_id) count, video_id from play_record) record on video.id = record.video_id"
+            + " where video.classify_id = :classify_id"
+            + " order by record.count"
+            + " limit 0, 10"
+            ).params(classify_id = self.id).all()
+        return rank_list
+
 class Collection(db.Model):
     '''
     Model for Collection. 合集.

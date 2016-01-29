@@ -24,18 +24,18 @@
 <div class="uk-grid">
     <div class="uk-width-medium-3-4">
         <div class="p-head">
-            <h2><strong>[TV2] 为什么我看的一月新番和你们不一样呢 ver2016.01</strong></h2>
+            <h2><strong>{{ video.title }}</strong></h2>
         </div>
         <br>
         <div class="p-head">
             <span>
                 <i class="uk-icon-play-circle-o"></i>
-                4.7万
+                {{ video.play_records.count() }}
             </span>
             &nbsp;&nbsp;
             <span>
                 <i class="uk-icon-commenting"></i>
-                560
+                {{ video.comments.count() }}
             </span>
         </div>
     </div>
@@ -80,15 +80,15 @@
                             <div class="uk-grid" style="margin-left:0px">
                                 <div class="uk-width-medium-1-6" style="height:30px;line-height:30px;text-align:center;padding:0px">
                                     <div style="margin-left:10px">
-                                        {{ danmu.time }}
+                                        {{ danmu.time | danmu_time }}
                                     </div>
                                 </div>
-                                <div class="uk-width-medium-3-6" style="height:30px;line-height:30px;text-align:left;text-overflow:ellipsis;overflow:hidden">
+                                <div class="uk-width-medium-3-6" style="height:30px;line-height:30px;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
                                     {{ danmu.text }}
                                 </div>
                                 <div class="uk-width-medium-2-6" style="height:30px;line-height:30px;text-align:left;padding:0px">
                                     <div style="margin-left:10px">
-                                        {{ danmu.danmu_time }}
+                                        {{ danmu.danmu_time | danmu_datetime }}
                                     </div>
                                 </div>
                             </div>

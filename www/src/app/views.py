@@ -28,6 +28,12 @@ def index():
 @app.route('/<video_id>', methods = ['GET'])
 def play(video_id):
     video = Video.query.get_or_404(video_id)
+    record = PlayRecord(
+            play_time = datetime.now(),
+            video = video,
+            classify = video.classify)
+    db.session.add(record)
+    db.session.commit()
     return render_template('play.html', video = video) 
 
 @app.route('/<video_id>/getDanmu')
@@ -54,7 +60,8 @@ def post_danmu(video_id):
             position = danmu_Dict.position,
             size = danmu_Dict.size,
             time = danmu_Dict.time,
-            video = video)
+            video = video,
+            danmu_time = datetime.now())
     db.session.add(danmu)
     db.session.commit()
     logging.debug('danmu add OK')
