@@ -12,6 +12,7 @@
     "tests"
   ],
   "dependencies": {
-    "uikit": "~2.24.3"
+    "uikit": "~2.24.3",
+    "uploadify": "^3.2.1"
   }
 }

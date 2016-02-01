@@ -29,7 +29,7 @@
 
                 <div class="p-body">
                     <ul class="p-ul">
-                        {% for video in classify.videos[0: 8] %}
+                        {% for video in classify.rank_list()[0:8] %}
                         <li class="p=li">
                             <div class="p-img-div">
                                 <a target="_blank" href="{{ video.id }}">
