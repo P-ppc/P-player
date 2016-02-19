@@ -3,103 +3,89 @@
 {% block beforehead %}
 <link rel="stylesheet" href="/static/src/css/scojs.css">
 <link rel="stylesheet" href="/static/src/css/colpick.css">
-<link rel="stylesheet" href="/static/src/css/bootstrap.css">
 <link rel="stylesheet" href="/static/src/css/main.css">
-
-<link rel="stylesheet" href="/static/css/P-player.css">
 {% endblock %}
 
 {% block content %}
-<div class="uk-grid">
-    <div class="uk-width-medium-1-4 uk-push-3-4">
-        <form class="uk-form">
-            <fieldset data-uk-margin>
-                <input type="text" placeholder="搜索">
-                <button type="submit" class="uk-button">搜索</button>
-            </fieldset>
-        </form>
-    </div>
-</div>
-
-<div class="uk-grid">
-    <div class="uk-width-medium-3-4">
-        <div class="p-head">
-            <h2><strong>{{ video.title }}</strong></h2>
-        </div>
-        <br>
-        <div class="p-head">
-            <span>
-                <i class="uk-icon-play-circle-o"></i>
-                {{ video.play_records.count() }}
-            </span>
-            &nbsp;&nbsp;
-            <span>
-                <i class="uk-icon-commenting"></i>
-                {{ video.comments.count() }}
-            </span>
-        </div>
-    </div>
-
-    <div class="uk-width-medium-1-4 uk-grid">
-        <div class="uk-width-medium-1-3">
-            <img src="/static/img/pic.jpg" style="width:60px;height:60px;">
-        </div>
-        <div class="uk-width-medium-2-3">
-            <h3><strong>up主</strong></h3>
-            <p>个性签名</p>    
-        </div>
-    </div>
-</div>
-
-<div class="uk-grid">
-    <div class="uk-width-medium-4-4"> 
-        <div class="p-head">
-            <div id="danmup" style="float:left">
+<!-- 标题和up主 -->
+<div class="row">
+    <div class="col-md-offset-1 col-md-10" style="padding:0px;margin-bottom:20px">
+        <div class="col-md-7" style="padding:0px">
+            <h2>{{ video.title }}</h2>
+            <div>
+                <span>
+                    <span class="glyphicon glyphicon-play-circle"></span>
+                    {{ video.play_records.count() }}
+                </span>
+                <span style="margin-left:20px">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    {{ video.comments.count() }}
+                </span>
             </div>
-            <div style="background:#f6f9fa;height:30px">
-                <div style="text-align:center;height:30px;line-height:30px">
+        </div>
+
+        <div class="col-md-offset-1 col-md-3" style="padding:0px">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="/static/img/pic.jpg" style="width:60px;height:60px;border-radius:30px">
+                </div> 
+                <div class="col-md-8" style="height:60px">
+                    <a>up主</a>
+                    <p>个性签名</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 视频和弹幕 -->
+<div class="row">
+    <div class="col-md-offset-1 col-md-10">
+        <div class="row">
+            <!-- 视频 -->
+            <div class="col-md-7" id="danmup">
+            </div>
+            <!-- 弹幕 -->
+            <div class="col-md-4" style="padding:0px">
+                <div style="text-align:center;height:30px;line-height:30px;background:#f6f9fa">
                     <strong>弹幕</strong>
-
                 </div>
-            </div>
-            <div style="height:30px" class="uk-grid">
-                <div class="uk-width-medium-1-6" style="height:30px;line-height:30px;text-align:center;padding:0px;">
-                    时间
+                <div class="row" style="margin:0px;height:30px;border:1px solid #ddd;background:#F4F4F4;border-bottom:none;">
+                    <div class="col-md-3" style="height:30px;line-height:30px;text-align:center">
+                        时间
+                    </div> 
+                    <div class="col-md-5" style="height:30px;line-height:30px;text-align:left">
+                        评论
+                    </div>
+                    <div class="col-md-4" style="height:30px;line-height:30px;text-align:left">
+                        发送日期
+                    </div>
                 </div>
-                <div class="uk-width-medium-3-6" style="height:30px;line-height:30px;text-align:left">
-                    评论
-                </div>
-                <div class="uk-width-medium-2-6" style="height:30px;line-height:30px;text-align:left;padding:0px">
-                    发送日期
-                </div>
-            </div>
-            <div style="background:;height:460px;overflow-y:scroll;">
-                <ul class="uk-list-striped" style="list-style-type:none;margin-left:-30px;">
-                    {% for danmu in video.danmus %}
-                        <li style="padding:0px">
-                            <div class="uk-grid" style="margin-left:0px">
-                                <div class="uk-width-medium-1-6" style="height:30px;line-height:30px;text-align:center;padding:0px">
-                                    <div style="margin-left:10px">
+                <div style="height:430px;overflow-y:scroll;border:1px solid #ddd;border-top:none;overflow-x:hidden">
+                    <ul style="list-style-type:none;padding:0">
+                        {% for danmu in video.danmus %}
+                            <li>
+                                <div class="row" style="margin:0;margin-right:-15px;border-top:1px solid #ddd;">
+                                    <div class="col-md-3" style="height:25px;line-height:25px;text-align:center">
                                         {{ danmu.time | danmu_time }}
                                     </div>
-                                </div>
-                                <div class="uk-width-medium-3-6" style="height:30px;line-height:30px;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-                                    {{ danmu.text }}
-                                </div>
-                                <div class="uk-width-medium-2-6" style="height:30px;line-height:30px;text-align:left;padding:0px">
-                                    <div style="margin-left:10px">
+                                    <div class="col-md-5" style="height:25px;line-height:25px;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                                        {{ danmu.text }}
+                                    </div>
+                                    <div class="col-md-4" style="height:25px;line-height:25px;text-align:left">
                                         {{ danmu.danmu_time | danmu_datetime }}
                                     </div>
                                 </div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- 评论区域 -->
 {% endblock %}
 
 {% block script %}
@@ -108,14 +94,13 @@
 <script src="/static/src/js/colpick.js"></script>
 <script src="/static/src/js/jquery.danmu.js"></script>
 <script src="/static/src/js/main.js"></script>
-
 <script>
-    $('#danmup').DanmuPlayer({
-        src: '/media/{{ video.path }}',
-        height: '480px',
-        width: '800px',
-        urlToGetDanmu: '{{ video.id }}/getDanmu',
-        urlToPostDanmu: '{{ video.id }}/postDanmu'
-    });
+$('#danmup').DanmuPlayer({
+    src: '/media/{{ video.path }}',
+    height: '450px',
+    width: '650px',
+    urlToGetDanmu: '/{{ video.id }}/getDanmu',
+    urlToPostDanmu: '/{{ video.id }}/postDanmu'
+});
 </script>
 {% endblock %}

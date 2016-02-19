@@ -21,6 +21,21 @@ class User(db.Model):
     comments = db.relationship('Comment', backref = 'user', lazy = 'dynamic')
     collections = db.relationship('Collection', backref = 'user', lazy = 'dynamic')
 
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        try:
+            return unicode(self.id)
+        except NameError:
+            return str(self.id)
+
 class Video(db.Model):
     '''
     Model for video.
@@ -40,6 +55,22 @@ class Video(db.Model):
     danmus = db.relationship('Danmu', backref = 'video', lazy = 'dynamic')
     comments = db.relationship('Comment', backref = 'video', lazy = 'dynamic')
     play_records = db.relationship('PlayRecord', backref = 'video', lazy = 'dynamic')
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'path': self.path,
+            'no': self.no,
+            'cover': self.cover_path
+        }
+    
+    @property
+    def cover_path(self):
+        if self.cover is None or self.cover == '':
+            return 'nopic.jpg'
+        else:
+            return self.cover
 
 class Danmu(db.Model):
     '''
@@ -81,9 +112,9 @@ class Classify(db.Model):
         # 获取播放量前10的视频
         rank_list = db.session.query(Video).from_statement(
               "select video.*, record.count from video"
-            + " left join (select count(video_id) count, video_id from play_record) record on video.id = record.video_id"
+            + " left join (select count(video_id) count, video_id from play_record group by video_id) record on video.id = record.video_id"
             + " where video.classify_id = :classify_id"
-            + " order by record.count"
+            + " order by record.count desc"
             + " limit 0, 10"
             ).params(classify_id = self.id).all()
         return rank_list

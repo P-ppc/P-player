@@ -1,0 +1,118 @@
+{% extends '__base__.html' %}
+
+{% block search %}
+{% endblock %}
+
+{% block content %}
+<input id="fileupload" type="file" name="file[]" multiple style="display:none">
+<form action="/save_video" method="post" enctype="multipart/form-data">
+    <div class="row" style="height:125px">
+        <div class="col-md-offset-2 col-md-2" style="text-align:right;border:1px solid #ddd;height:100%">
+            <b>封面图</b><br>
+            点击图片上传<br>
+            建议至少480*300<br>
+            支持高清封面960*600<br>
+        </div>
+        <div class="col-md-6" style="border:1px solid #ddd;height:100%">
+            <input type="file" name="cover" id="cover" style="display:none">
+            <div class="div-cover" style="width:160px;cursor:pointer">
+                <img style="height:100px;width:160px;border:0">
+                <div style="text-align:center;width:160px;background:rgba(0,0,0,0.5)">上传封面</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="height:80px">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2" style="text-align:right;border:1px solid #ddd;height:100%">
+            <b>标题</b><br>
+            40字以内<br>
+            请尽量使用中文<br>
+            <span style="color:#F35C8F">(必填)</span>
+        </div>
+        <div class="col-md-6" style="border:1px solid #ddd;height:100%;line-height:100%">
+            <input type="text" class="form-control" name="title" required style="margin-top:20px">
+        </div>
+    </div>
+
+    <div class="row" style="height:50px">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2" style="text-align:right;border:1px solid #ddd;height:100%">
+            <b>视频</b><br>
+            只接受mp4文件<br>
+        </div>
+        <div class="col-md-6" style="border:1px solid #ddd;height:100%">
+            <input type="hidden" name="video" id="video">
+            <button class="btn btn-info btn-select" style="margin-top:7px">
+                <i class="glyphicon glyphicon-upload"></i>&nbsp;
+                本地上传
+            </button>
+        </div> 
+    </div>
+
+    <div class="row" style="height:60px">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-2" style="text-align:right;border:1px solid #ddd;height:100%">
+            <br>
+            <b>上传进度</b><br>
+        </div>
+        <div class="col-md-6" style="border:1px solid #ddd;height:100%">
+            <br>
+            <div class="col-md-12" style="height:25px;padding:0;display:none" id="bar" >
+                <div class="progress active" style="height:100%">
+                    <div class="progress-bar progress-bar-info" role="progressbar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br> 
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8" align="center">
+            <input type="submit" class="btn btn-info btn-submit" style="width:100px;" disabled="disabled" value="提交">
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script src="/static/bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="/static/bower_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="/static/bower_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
+<script src="/static/bower_components/blueimp-file-upload/js/jquery.fileupload-process.js"></script>
+<script>
+$(function() {
+    $(".div-cover").click(function() {
+        $("#cover").click();
+    });
+    $("#fileupload").fileupload({
+        url: '/file_stream',
+        sequentialUploads: true,
+    }).bind('fileuploadprogress', function(e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10);
+        $(".progress-bar").css("width", progress + '%');
+    }).bind('fileuploaddone', function(e, data) {
+        console.log(data.result);
+        dt = JSON.parse(data.result);
+        if (dt.result == 'success') {
+            console.log('video upload done!');
+            $(".btn-submit").attr("disabled", false);
+            $("#video").val(dt.path);
+        };
+    });
+    $(".btn-select").click(function() {
+        $("#fileupload").click();
+        // 防止提交表单
+        return false;
+    });
+    $("#fileupload").change(function() {
+        $("#bar").show();
+    });
+});
+</script>
+{% endblock %}

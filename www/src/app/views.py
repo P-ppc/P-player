@@ -10,8 +10,9 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 
 from app import app, db, lm
 from models import User, Video, Danmu, Comment, Classify, Collection, PlayRecord
-from config import MEDIA_DIR
+from config import MEDIA_DIR 
 from utils import toDict, get_logging
+from forms import LoginForm, RegisterForm
 
 '''
 init logging.
@@ -19,6 +20,7 @@ init logging.
 logging = get_logging()
 
 @app.route('/', methods = ['GET'])
+@app.route('/index', methods = ['GET'])
 def index():
     classifys = Classify.query.order_by(Classify.sort).all()
     return render_template('index.html', classifys = classifys) 
@@ -61,16 +63,111 @@ def post_danmu(video_id):
             size = danmu_Dict.size,
             time = danmu_Dict.time,
             video = video,
-            danmu_time = datetime.now())
+            danmu_time = datetime.now(),
+            user = g.user)
     db.session.add(danmu)
     db.session.commit()
     logging.debug('danmu add OK')
     return 'danmu add OK'
 
 # for user
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        login_user(form.user) 
+        return redirect(request.args.get('next') or url_for('index'))
+    
+    return render_template('login.html', form = form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@lm.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+@app.before_request
+def before_request():
+    g.user = current_user
+
+@app.route('/register', methods = ['GET', 'POST'])
+def register():
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(username = form.username.data, password = form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('index'))
+    logging.debug(request.method)
+    logging.debug(form.errors)
+    logging.debug(form.validate_on_submit())
+    return render_template('register.html', form = form)
 
 # for comment
 
 # for post
 
+# for upload video
 
+@app.route('/file_upload')
+@login_required
+def file_upload():
+    return render_template('file_upload.html')
+
+@app.route('/file_stream', methods = ['POST'])
+@login_required
+def flie_stream():
+    '''
+    Just save the video.
+    '''
+    f = request.files.get('file[]', None)
+    logging.debug(f.filename)
+    try:
+        if f is not None and f.filename.endswith('.mp4'):
+            path = str(int(time.time())) + '.mp4'
+            f.save(MEDIA_DIR + '/' + path)
+        return json.dumps({'result': 'success', 'path': path })
+    except:
+        return json.dumps({'result': 'fail'})
+
+@app.route('/save_video', methods = ['POST'])
+@login_required
+def save_video():
+    '''
+    Save the title, path, cover, upload_time, collection_sort ... in db.
+    '''
+    logging.debug(request.files)
+    logging.debug(request.form)
+    # user
+    # title
+    title = request.form.get('title', None)
+    path = request.form.get('video', None)
+    cover = request.files.get('cover', None)
+    cover_type = ('.jpeg', '.png', '.jpg')
+    if cover is not None and cover.filename.endswith(cover_type):
+        cover_path = str(int(time.time())) + '.' +cover.filename.split('.')[-1]
+        cover.save(MEDIA_DIR + '/' + cover_path)
+    else:
+        cover_path = None
+    upload_time = datetime.now()
+    classify = Classify.query.all()[0]
+    video = Video(
+                title = title,
+                path = path,
+                cover = cover_path,
+                upload_time = upload_time,
+                classify = classify,
+                user = g.user)
+    db.session.add(video)
+    db.session.commit()
+    #return json.dumps({'result': 'success'})
+    return redirect(url_for('index'))

@@ -4,52 +4,76 @@
     <meta charset="utf-8">
     {% block meta %}<!-- block meta -->{% endblock %}
     <title>{% block title %}{% endblock %}</title>
-    <!--[if lt IE 9]>
+    <!-- [if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="/static/bower_components/uikit/css/uikit.min.css">
-    <link rel="stylesheet" href="/static/bower_components/uikit/css/uikit.gradient.min.css">
+    <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
     {% block beforehead %}<!-- before head -->{% endblock %}
 </head>
 <body>
-    <nav class="uk-navbar uk-navbar-attached uk-margin-large-bottom">
-        <div class="uk-container uk-container-center">
-            <a href="/" class="uk-navbar-brand">P-player</a>
-            
-            <div class="uk-navbar-flip">
-                <ul class="uk-navbar-nav">
-                {% if g.user %}
-                    <li class="uk-parent" data-uk-dropdown>
-                        <a href="#0"><i class="uk-icon-user"></i> {{ user.name }}</a>
-                        <div class="uk-dropdown uk-dropdown-navbar">
-                            <ul class="uk-nav uk-navbar">
-                                <li><a href="/sigout"><i class="uk-icon-sign-out"></i> 登出</a></li>
+    {% block nav %}
+    <div id="header" class="navbar navbar-static-top bs-docs-nav" style="background-color:#2E2E2E">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-1 col-md-3">
+                    <a class="navbar-brand" href="/">P-player</a> 
+                </div>
+                <div class="col-md-offset-5 col-md-2">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            {% if not g.user.is_authenticated %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">注册/登录<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ url_for('login') }}">登录</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('register') }}">注册</a>
+                                </li>
                             </ul>
-                        </div>
-                    </li>
-                {% else %}
-                    <li><a href="/signin"><i class="uk-icon-sign-in"></i> 登录</a></li>
-                    <li><a href="/register"><i class="uk-icon-edit"></i> 注册</a></li>
-                {% endif %}
-                </ul>
+                            {% else %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ g.user.username }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ url_for('logout') }}">登出</a>
+                            </ul>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% endblock %}
+    
+    {% block search %}
+    <div id="search" style="height:30px;margin-top:30px;margin-bottom:30px">
+        <div class="container">
+            <div class="input-group col-md-offset-8 col-md-3">
+                <input type="text" class="form-control" style="display:inline" placeholder="搜索">
+                <div style="position:absolute;z-index:99;right:10px;top:6px;cursor:pointer">
+                    <span class="glyphicon glyphicon-search" style="font-size:20px"></span>
+                </div>
             </div>
         </div>
-    </nav>
-
-    <div class="uk-container uk-container-center">
+    </div>
+    {% endblock %}
+    
+    <div class="container">
         <!-- content -->
         {% block content %}
         {% endblock %}
         <!-- End content -->
-    </div>
+    </div>     
 
 </body>
 <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/static/bower_components/uikit/js/uikit.min.js"></script>
-{% block script %}
+<script src="/static/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/static/bower_components/vue/dist/vue.min.js"></script>
 <!-- script -->
-<!-- End script -->
+{% block script %}
 {% endblock %}
+<!-- End script -->
 </html>
-

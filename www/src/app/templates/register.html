@@ -1,0 +1,46 @@
+{% extends '__base__.html' %}
+
+{% block search %}
+{% endblock %}
+
+{% block content %}
+<div style="margin-top:100px">
+    <div class="row" style="margin-bottom:30px">
+        <div class="col-md-offset-4 col-md-3" style="text-align:center">
+            <h2>注&nbsp;册</h2>
+        </div>
+    </div>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="row" style="margin-bottom:20px">
+            <div class="col-md-offset-4 col-md-3">
+                <input type="text" class="form-control" placeholder="用户名" name="username">
+                {% for error in form.username.errors %}
+                    <span style="color:red">[{{ error }}]</span>
+                {% endfor %}
+            </div>    
+        </div> 
+        <div class="row" style="margin-bottom:20px">
+            <div class="col-md-offset-4 col-md-3">
+                <input type="password" class="form-control" placeholder="密码" name="password">
+                {% for error in form.password.errors %}
+                    <span style="color:red">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:20px">
+            <div class="col-md-offset-4 col-md-3">
+                <input type="password" class="form-control" placeholder="重复密码" name="password_repeat">
+                {% for error in form.password_repeat.errors %}
+                    <span style="color:red">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-4 col-md-3">
+                <input type="submit" class="btn btn-info" style="width:100%" value="注 册">
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

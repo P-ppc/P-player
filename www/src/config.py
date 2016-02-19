@@ -20,3 +20,5 @@ MEDIA_DIR = os.path.join(wwwdir, '../media')
 logging file.
 '''
 LOGGING_FILE = os.path.join(wwwdir, '../../log/run.log')
+
+NGINX_PORT = '90'

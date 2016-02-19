@@ -1,82 +1,73 @@
 {% extends '__base__.html' %}
 
-{% block beforehead %}
-    <link rel="stylesheet" href="/static/css/P-player.css">
-{% endblock %}
-
 {% block content %}
-<div class="uk-grid">
-    <div class="uk-width-medium-1-4 uk-push-3-4">
-        <form class="uk-form">
-            <fieldset data-uk-margin>
-                <input type="text" placeholder="搜索">
-                <button type="submit" class="uk-button">搜索</button>
-            </fieldset>
-        </form>
-    </div>
+<!-- 搜索 -->
+<div class="row">
 </div>
+
 {% if classifys %}
     {% for classify in classifys %}
-        <div class="uk-grid">
-            <div class="uk-width-medium-3-4">
-                <div class="p-head">
-                    <!-- 图标 -->
-                    <span class="uk-icon-bars uk-icon-medium">
-                        <!-- 标题 -->
-                        <a class="p-head-t" style="text-decoration:none"><strong>{{ classify.name }}</strong></a>
+        <!-- 每个分类的视频 -->
+        <div class="row" style="margin-bottom:20px">
+            <!-- 8个视频 -->
+            <div class="col-md-offset-1 col-md-8">
+                <div style="margin-bottom:1.5em">
+                    <span class="glyphicon glyphicon-cog" style="font-size:20px;">
+                    </span>
+                        <a style="font-size:20px;color:#444;margin-left:16px;text-decoration:none">
+                            <strong>{{ classify.name }}</strong>
+                        </a>
+                </div>
+                <ul style="list-style-type:none;padding:0px">
+                    {% for video in classify.rank_list()[0:8] %}
+                    <li style="float:left;margin-right:15px">
+                        <div style="margin-bottom:10px">
+                            <a target="_blank" href="{{ video.id }}">
+                                <img style="width:160px;height:100px;border-radius:4px" src="/media/{{ video.cover_path }}">
+                            </a>
+                        </div>
+                        <div style="margin-bottom:10px">
+                            {{ video.title }}
+                        </div>
+                        <div style="margin-bottom:16px;width:160px">
+                            <span>
+                                <span class="glyphicon glyphicon-play-circle"></span>
+                                {{ video.play_records.count() }}
+                            </span>
+                            <span style="float:right">
+                                <span class="glyphicon glyphicon-comment"></span>
+                                {{ video.comments.count() }}
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- 8个排行 -->
+            <div class="col-md-3" style="margin-left:-60px">
+                <div style="margin-bottom:1.5em">
+                    <span style="font-size:20px">
+                        <strong>排行</strong>
                     </span>
                 </div>
-
-                <div class="p-body">
-                    <ul class="p-ul">
+                <div>
+                    <ul style="list-style-type:none;padding:0px;">
                         {% for video in classify.rank_list()[0:8] %}
-                        <li class="p=li">
-                            <div class="p-img-div">
-                                <a target="_blank" href="{{ video.id }}">
-                                    <img class="p-img" src="/static/img/pic.jpg">
+                        <li style="margin-bottom:1.8em">
+                            <div style="width:18px;height:18px;background:#f25d8e;font-style:normal;text-align:center;line-height:18px;float:left;border-radius:3px">
+                                <span>{{ loop.index }}</span>
+                            </div>
+                            <div style="font-size:16px;height:18px;font-style:blod;line-height:18px;margin-left:18px">
+                                <a target="_blank" href="{{ video.id }}" style="text-decoration:none;font-size: 1em; color:#444; margin-left:16px" >
+                                    <strong> {{ video.title }}</strong>
                                 </a>
                             </div>
-                            <div class="p-img-div">
-                                {{ video.title }}
-                            </div>
-                            <div class="p-detail-div">
-                                <span>
-                                    <i class="uk-icon-play-circle-o"></i>
-                                    {{ video.play_records.count() }}
-                                </span>
-                                <span class="p-comment-span">
-                                    <i class="uk-icon-commenting"></i>
-                                    {{ video.comments.count() }}
-                                </span>
                         </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
-            
-            <div class="uk-width-medium-1-4">
-                <div>
-                    <span class="uk-icon-medium">
-                        <strong>排行</strong>
-                    </span>
-                </div>
-
-                <div style="margin-top:1.5em">
-                    <ul class="p-ul">
-                        {% for video in classify.rank_list() %}
-                        <li class="p-li-s">
-                            <div class="p-i-number">
-                                <span>{{ loop.index }}</span>
-                            </div>
-                            <div class="p-i-title">
-                                <a target="_blank" href="{{ video.id }}" style="text-decoration:none" class="p-head-t"><strong>{{ video.title }}</strong></a>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
         </div>
     {% endfor %}
 {% endif %}
-{% endblock content %}
+{% endblock %}

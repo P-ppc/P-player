@@ -61,3 +61,7 @@ target/
 bower_components/
 demo/
 danmu/
+www/media/*.mp4
+www/media/*jpeg
+www/media/*jpg
+www/media/*png

@@ -13,6 +13,8 @@
   ],
   "dependencies": {
     "uikit": "~2.24.3",
-    "uploadify": "^3.2.1"
+    "blueimp-file-upload": "jquery-file-upload#^9.11.2",
+    "bootstrap": "^3.3.6",
+    "vue": "^1.0.16"
   }
 }
