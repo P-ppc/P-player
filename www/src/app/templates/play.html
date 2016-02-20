@@ -4,34 +4,41 @@
 <link rel="stylesheet" href="/static/src/css/scojs.css">
 <link rel="stylesheet" href="/static/src/css/colpick.css">
 <link rel="stylesheet" href="/static/src/css/main.css">
+<style>
+a:hover {
+    text-decoration:none;
+}
+</style>
 {% endblock %}
 
 {% block content %}
 <!-- 标题和up主 -->
 <div class="row">
-    <div class="col-md-offset-1 col-md-10" style="padding:0px;margin-bottom:20px">
-        <div class="col-md-7" style="padding:0px">
-            <h2>{{ video.title }}</h2>
-            <div>
-                <span>
-                    <span class="glyphicon glyphicon-play-circle"></span>
-                    {{ video.play_records.count() }}
-                </span>
-                <span style="margin-left:20px">
-                    <span class="glyphicon glyphicon-comment"></span>
-                    {{ video.comments.count() }}
-                </span>
+    <div class="col-md-offset-1 col-md-10" style="margin-bottom:20px">
+        <div class="row">
+            <div class="col-md-7" style="padding:0px">
+                <h2>{{ video.title }}</h2>
+                <div>
+                    <span>
+                        <span class="glyphicon glyphicon-play-circle"></span>
+                        {{ video.play_records.count() }}
+                    </span>
+                    <span style="margin-left:20px">
+                        <span class="glyphicon glyphicon-comment"></span>
+                        {{ video.comments.count() }}
+                    </span>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-offset-1 col-md-3" style="padding:0px">
-            <div class="row">
-                <div class="col-md-4">
-                    <img src="/static/img/pic.jpg" style="width:60px;height:60px;border-radius:30px">
-                </div> 
-                <div class="col-md-8" style="height:60px">
-                    <a>up主</a>
-                    <p>个性签名</p>
+            <div class="col-md-offset-1 col-md-3" style="padding:0px">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="/static/img/pic.jpg" style="width:60px;height:60px;border-radius:30px">
+                    </div> 
+                    <div class="col-md-8" style="height:60px">
+                        <a>up主</a>
+                        <p>个性签名</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,6 +93,60 @@
 </div>
 
 <!-- 评论区域 -->
+<div class="row" style="margin-top:100px;">
+    <div class="col-md-offset-1 col-md-10" style="">
+        <div class="row">
+            <div class="col-md-8" style="padding:0px;border-bottom:1px solid #ddd">
+                <h2>{{ video.comments.count() }} 评论</h2>
+            </div>
+        </div>
+        <div class="row" style="height:20px">
+        </div>
+        {% if video.comments.count() > 0 %}
+            {% for comment in video.comments %}
+            <div class="row" style="height:100px">
+                <div class="col-md-1" style="height:100px;line-height:100px;padding:0px">
+                    <img style="height:48px;width:48px;border-radius:24px;margin-left:0px" src="/static/img/pic.jpg">
+                </div>
+                {% if loop.index == 1 %}
+                <div class="col-md-7" style="padding:0px;height:100%;border-top:1px solid #ddd;border-bottom:1px solid #ddd">
+                {% else %} 
+                <div class="col-md-7" style="padding:0px;height:100%;border-bottom:1px solid #ddd">
+                {% endif %}
+                    <!-- 用户名 -->
+                    <div class="row" style="margin-top:10px;margin-left:0px;height:20px">
+                        <a href="#" style="font-weight:bold;color:#6d757a;font-size:12px:text-decoration:none">{{ comment.user.username }}</a>
+                    </div>
+                    <!-- 评论 -->
+                    <div class="row" style="margin-top:10px;margin-left:0px;height:20px;line-height:20px">
+                        {{ comment.content }}
+                    </div>
+                    <!-- 时间、楼层等信息 -->
+                    <div class="row" style="margin-top:10px;margin-left:0px;height:20px">
+                        <span style="color:#aaa">#{{ comment.sort }}</span>
+                        <span style="color:#aaa;margin-left:20px">{{ comment.comment_time | danmu_datetime }}</span>
+                    </div>
+                </div> 
+            </div>
+            {% endfor %}
+        {% endif %}
+        <div class="row" style="height:60px;">
+            <div class="col-md-8" style="height:100%;border-bottom:1px solid #ddd">
+            </div>
+        </div>
+        <div class="row" style="height:60px;margin-top:20px">
+            <div class="col-md-1" style="height:60px;line-height:60px;padding:0px">
+                <img style="height:48px;width:48px;border-radius:24px;margin-left:0px" src="/static/img/pic.jpg">
+            </div>
+            <div class="col-md-6" style="padding:0px;height:100%">
+                <textarea class="form-control" style="height:100%;width:95%" placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"></textarea>
+            </div>
+            <div class="col-md-1" style="height:100%;padding:0px">
+                <input type="submit" class="btn btn-info" style="height:100%" value="提交评论" >
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block script %}

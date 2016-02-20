@@ -56,15 +56,6 @@ class Video(db.Model):
     comments = db.relationship('Comment', backref = 'video', lazy = 'dynamic')
     play_records = db.relationship('PlayRecord', backref = 'video', lazy = 'dynamic')
 
-    def to_json(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'path': self.path,
-            'no': self.no,
-            'cover': self.cover_path
-        }
-    
     @property
     def cover_path(self):
         if self.cover is None or self.cover == '':
