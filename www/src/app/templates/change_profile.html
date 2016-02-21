@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-6" style="border:1px solid #ddd;height:100%">
             <input type="file" name="avator" id="avator" style="display:none">
-            <div style="width:160px;cursor:pointer">
+            <div style="width:160px;cursor:pointer" id="div-avator">
                 <img style="height:100px;width:160px;border:0">
                 <div style="text-align:center;width:160px;background:rgba(0, 0, 0, 0.5)">上传头像</div>
             </div>
@@ -25,7 +25,7 @@
             30个字符以内<br>
         </div>
         <div class="col-md-6" style="border:1px solid #ddd;height:100%">
-            <textarea class="form-control" style="margin-top:12px" placeholder="个性签名"></textarea>
+            <textarea class="form-control" name="sign" style="margin-top:12px" placeholder="个性签名"></textarea>
         </div>
     </div>
     <br>
@@ -41,6 +41,9 @@
 <script>
 $(function() {
     $(".change-profile").addClass("active");
+    $("#div-avator").click(function() {
+        $("#avator").click();
+    });
 });
 </script>
 {% endblock %}

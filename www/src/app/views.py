@@ -123,7 +123,21 @@ def change_password():
     return render_template('change_password.html', form = form)
 
 @app.route('/change_profile', methods = ['GET', 'POST'])
+@login_required
 def change_profile():
+    if request.method == 'POST':
+        avator_type = ('.jpeg', '.png', '.jpg')
+        f = request.files.get('avator', None)
+        sign = request.form.get('sign', '')
+        avator_path = str()
+        if f != None and f.filename.endswith(avator_type):
+            avator_path = str(int(time.time())) + '.' + f.filename.split('.')[-1] 
+            f.save(MEDIA_DIR + '/' + avator_path)
+        g.user.sign = sign
+        g.user.avator = avator_path
+        db.session.add(g.user)
+        db.session.commit() 
+        return redirect(url_for('index'))
     return render_template('change_profile.html')
 
 # for comment

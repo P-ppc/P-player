@@ -15,6 +15,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(64), unique = True)
     password = db.Column(db.String(64))
+    sign = db.Column(db.Text)
+    avator = db.Column(db.String(128))
 
     videos = db.relationship('Video', backref = 'user', lazy = 'dynamic')
     danmus = db.relationship('Danmu', backref = 'user', lazy = 'dynamic')
@@ -35,6 +37,13 @@ class User(db.Model):
             return unicode(self.id)
         except NameError:
             return str(self.id)
+
+    @property
+    def get_avator(self):
+        if self.avator is None or self.avator == '':
+            return 'nopic.jpg'
+        else:
+            return self.avator
 
 class Video(db.Model):
     '''
