@@ -1,0 +1,46 @@
+{% extends '__base_manager__.html' %}
+
+{% block menu_content %}
+<form action="/change_profile" method="post" enctype="multipart/form-data" style="margin-top:20px;margin-bottom:20px">
+    <div class="row" style="height:125px">
+        <div class="col-md-3" style="text-align:right;border:1px solid #ddd;height:100%">
+            <b>头像</b><br>
+            点击图片上传<br>
+            建议至少480*300<br>
+            支持高清头像960*600<br>
+        </div>
+        <div class="col-md-6" style="border:1px solid #ddd;height:100%">
+            <input type="file" name="avator" id="avator" style="display:none">
+            <div style="width:160px;cursor:pointer">
+                <img style="height:100px;width:160px;border:0">
+                <div style="text-align:center;width:160px;background:rgba(0, 0, 0, 0.5)">上传头像</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" style="height:80px">
+        <div class="col-md-3" style="text-align:right;border:1px solid #ddd;height:100%;">
+            <br>
+            <b>个性签名</b><br>
+            30个字符以内<br>
+        </div>
+        <div class="col-md-6" style="border:1px solid #ddd;height:100%">
+            <textarea class="form-control" style="margin-top:12px" placeholder="个性签名"></textarea>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-9" align="center">
+            <input type="submit" class="btn btn-info" style="width:100px;"  value="提交">
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block script %}
+<script>
+$(function() {
+    $(".change-profile").addClass("active");
+});
+</script>
+{% endblock %}

@@ -36,3 +36,25 @@ class RegisterForm(Form):
             self.password_repeat.errors.append(u'两次密码输入不一致！')
             return False
         return True
+
+class ChangePasswordForm(Form):
+    old_password = StringField('old_password', validators = [DataRequired()])
+    new_password = StringField('new_password', validators = [DataRequired()])
+    new_password_repeat = StringField('new_password_repeat', validators = [DataRequired()])
+    
+    def __init__(self, user):
+        Form.__init__(self)
+        self.user = user
+        
+    def validate(self):
+        if not Form.validate(self):
+            return False 
+        if self.new_password.data != self.new_password_repeat.data:
+            self.new_password_repeat.errors.append(u'两次密码输入不一致！')
+            return False
+
+        if self.user.password != self.old_password.data:
+            self.old_password.errors.append(u'原密码错误！')
+            return False
+
+        return True

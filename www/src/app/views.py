@@ -12,7 +12,7 @@ from app import app, db, lm
 from models import User, Video, Danmu, Comment, Classify, Collection, PlayRecord
 from config import MEDIA_DIR 
 from utils import toDict, get_logging
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, ChangePasswordForm
 
 '''
 init logging.
@@ -107,12 +107,40 @@ def register():
         db.session.commit()
         login_user(user)
         return redirect(url_for('index'))
-    logging.debug(request.method)
-    logging.debug(form.errors)
-    logging.debug(form.validate_on_submit())
     return render_template('register.html', form = form)
 
+@app.route('/change_password', methods = ['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm(g.user)
+    logging.debug(form.validate_on_submit())
+    logging.debug(form.errors)
+    if form.validate_on_submit():
+        g.user.password = form.new_password.data
+        db.session.add(g.user)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('change_password.html', form = form)
+
+@app.route('/change_profile', methods = ['GET', 'POST'])
+def change_profile():
+    return render_template('change_profile.html')
+
 # for comment
+@app.route('/<video_id>/add_comment', methods = ['POST'])
+@login_required
+def add_comment(video_id):
+    video = Video.query.get_or_404(video_id)
+    sort = Comment.query.filter_by(video_id = video_id).count() + 1
+    content = request.form.get('content', '')
+    comment = Comment(content = content, 
+                      sort = sort,
+                      video = video,
+                      user = g.user)
+    db.session.add(comment)
+    db.session.commit()
+    # return json.dumps({'result': 'success'})
+    return redirect(url_for('play', video_id = video_id))
 
 # for post
 
@@ -121,7 +149,7 @@ def register():
 @app.route('/file_upload')
 @login_required
 def file_upload():
-    return render_template('file_upload.html')
+    return render_template('video_upload.html')
 
 @app.route('/file_stream', methods = ['POST'])
 @login_required
@@ -145,10 +173,6 @@ def save_video():
     '''
     Save the title, path, cover, upload_time, collection_sort ... in db.
     '''
-    logging.debug(request.files)
-    logging.debug(request.form)
-    # user
-    # title
     title = request.form.get('title', None)
     path = request.form.get('video', None)
     cover = request.files.get('cover', None)
@@ -171,3 +195,7 @@ def save_video():
     db.session.commit()
     #return json.dumps({'result': 'success'})
     return redirect(url_for('index'))
+
+@app.route('/test')
+def test():
+    return render_template('video_upload.html')

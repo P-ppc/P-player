@@ -1,0 +1,22 @@
+{% extends '__base__.html' %}
+
+{% block search %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- 导航 -->
+    <div class="col-md-offset-1 col-md-2">
+        <ul class="nav nav-pills nav-stacked" style="border:1px solid #ddd;border-radius:5px">
+            <li role="presentation" class="file-upload"><a href="/file_upload">视频上传</a></li>
+            <li role="presentation" class="change-profile"><a href="/change_profile">用户资料修改</a></li>
+            <li role="presentation" class="change-password"><a href="/change_password">修改密码</a></li>
+        </ul>
+    </div>
+    <!-- 内容 -->
+    <div class="col-md-8" style="border:1px solid #ddd">
+        {% block menu_content %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
