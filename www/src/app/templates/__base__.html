@@ -9,9 +9,21 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <style style="text/css">
+    html, body {height:100%}
+    .wrapper {
+        min-height:100%;
+        _height:100%;
+        margin-bottom:-80px; /*假定页脚的高度为120px*/
+    }
+    .p-footer, .footer_placeholder {height:80px}
+    body {margin:0}
+    .footer_placeholder {clear:both}
+    </style>
     {% block beforehead %}<!-- before head -->{% endblock %}
 </head>
-<body>
+<body style="height:100%">
+    <div class="wrapper">
     {% block nav %}
     <div id="header" class="navbar navbar-static-top bs-docs-nav" style="background-color:#2E2E2E">
         <div class="container">
@@ -65,15 +77,20 @@
     </div>
     {% endblock %}
     
-    <div class="container">
+    <div class="container" style="margin-bottom:30px">
         <!-- content -->
         {% block content %}
         {% endblock %}
         <!-- End content -->
     </div>     
+    
+    <div class="footer_placeholder"></div>
+    </div>
 
     {% block footer %}
-
+    <div class="p-footer" style="background-color:#ddd;font-size:14px;line-height:80px;text-align:center">
+        <span>&copy;P-player</span> 
+    </div>
     {% endblock %}
 
 </body>
